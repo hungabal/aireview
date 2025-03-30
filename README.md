@@ -1,81 +1,88 @@
-# AI Code Review
+# AI Kódelemző
 
-A web application that uses Ollama's generate API to analyze code from GitHub and GitLab commits. The application provides detailed code analysis, including security vulnerabilities, code quality issues, and suggestions for improvements.
+Webalkalmazás, amely az Ollama generate API-ját használja GitHub és GitLab commitok kódjának elemzésére. Az alkalmazás részletes kódelemzést nyújt, beleértve a biztonsági sebezhetőségeket, kódminőségi problémákat és javaslatokat a fejlesztésre.
 
-## Features
+## Képernyőképek a projektről
 
-- Support for both GitHub and GitLab repositories
-- Code analysis using Ollama's generate API
-- Detailed analysis including:
-  - Security vulnerabilities
-  - Code quality issues
-  - Simplification suggestions
-  - Best practices violations
-- Side-by-side code comparison
-- Ability to apply suggested fixes
-- Modern and responsive UI
+![Kezdőlap](images/kezdolap.png)
+![Töltő képernyő](images/elemzes.png)
+![Eredmény1](images/eredmeny1.png)
+![Eredmény2](images/eredmeny2.png)
 
-## Prerequisites
+## Funkciók
 
-- Node.js (v14 or higher)
-- Ollama installed and running locally
-- GitLab access token (for GitLab repositories)
-- GitHub access token (optional, for private repositories)
+- GitHub és GitLab tárolók támogatása
+- Kódelemzés az Ollama generate API használatával
+- Részletes elemzés, amely tartalmaz:
+  - Biztonsági sebezhetőségeket
+  - Kódminőségi problémákat
+  - Egyszerűsítési javaslatokat
+  - Legjobb gyakorlatok megsértését
+- Párhuzamos kódösszehasonlítás
+- Javasolt javítások alkalmazásának lehetősége
+- Modern és reszponzív felhasználói felület
 
-## Installation
+## Előfeltételek
 
-1. Clone the repository:
+- Node.js (v14 vagy újabb)
+- Telepített és helyileg futó Ollama
+- GitLab hozzáférési token (GitLab tárolókhoz)
+- GitHub hozzáférési token (opcionális, privát tárolókhoz)
+
+## Telepítés
+
+1. Klónozd a tárolót:
 ```bash
 git clone <repository-url>
 cd aireview
 ```
 
-2. Install dependencies:
+2. Telepítsd a függőségeket:
 ```bash
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
+3. Hozz létre egy `.env` fájlt a gyökérkönyvtárban:
 ```env
 PORT=3000
 ```
 
-4. Start the application:
+4. Indítsd el az alkalmazást:
 ```bash
 npm start
 ```
 
-For development with auto-reload:
+Fejlesztéshez automatikus újratöltéssel:
 ```bash
 npm run dev
 ```
 
-## Usage
+## Használat
 
-1. Open your browser and navigate to `http://localhost:3000`
-2. Select the platform (GitHub or GitLab)
-3. Enter the project details:
-   - For GitHub: owner/repo format
-   - For GitLab: project path
-4. Enter the commit SHA you want to analyze
-5. Select the Ollama model to use
-6. Enter your access token if required
-7. Click "Analyze Code" to start the analysis
-8. Review the results and apply suggested fixes if desired
+1. Nyisd meg a böngésződet és navigálj a `http://localhost:3000` címre
+2. Válaszd ki a platformot (GitHub vagy GitLab)
+3. Add meg a projekt adatait:
+   - GitHub esetén: tulajdonos/tároló formátumban
+   - GitLab esetén: projekt útvonalát
+4. Add meg a commit SHA-t, amelyet elemezni szeretnél
+5. Válaszd ki a használni kívánt Ollama modellt
+6. Add meg a hozzáférési tokent, ha szükséges
+7. Kattints a "Kód elemzése" gombra az elemzés elindításához
+8. Tekintsd át az eredményeket és alkalmazd a javasolt javításokat, ha szeretnéd
 
-## Ollama Models
+## Ollama Modellek
 
-The application works with any Ollama model that can understand and analyze code. Recommended models include:
+Az alkalmazás bármely Ollama modellel működik, amely képes megérteni és elemezni a kódot. Ajánlott modellek:
 - codellama
 - mistral
 - llama2
 
-Make sure you have the desired model pulled in Ollama before using it.
+Győződj meg róla, hogy a kívánt modell már le van töltve az Ollama-ban, mielőtt használnád.
 
-## Contributing
+## Közreműködés
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Szívesen fogadjuk a közreműködéseket! Nyugodtan küldj be egy Pull Request-et.
 
-## License
+## Licenc
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+Ez a projekt az MIT Licenc alatt áll - részletekért lásd a LICENSE fájlt. 
