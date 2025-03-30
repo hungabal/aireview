@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Analysis Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        .card-feedback {
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+            padding-left: 15px;
+        }
+        .question {
+            font-weight: bold;
+            color: #0d6efd;
+            margin-bottom: 5px;
+        }
+        .answer {
+            margin-bottom: 15px;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .diff-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .diff-panel {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+        .diff-panel:first-child {
+            margin-right: 10px;
+        }
+        .diff-panel h6 {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .diff-code {
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .line-added {
+            background-color: #e6ffed;
+            color: #28a745;
+        }
+        .line-removed {
+            background-color: #ffdce0;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Kód Elemzési Eredmények</h1>
+        <a href="/" class="btn btn-secondary mb-4">Vissza az Elemzéshez</a>
+
+        <% results.forEach(function(result) { %>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><%= result.filename %></h5>
+                </div>
+                <div class="card-body">
+                    <!-- Diff View -->
+                    <h5 class="mb-3">Kód Összehasonlítás</h5>
+                    <div class="diff-container">
+                        <div class="diff-panel">
+                            <h6>Eredeti Kód</h6>
+                            <pre class="diff-code"><%= result.content %></pre>
+                        </div>
+                        <div class="diff-panel">
+                            <h6>Javított Kód</h6>
+                            <pre class="diff-code"><%= result.analysis.fixed_code %></pre>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Feedback -->
+                    <div class="mt-5">
+                        <h5 class="mb-3">AI Elemzési Visszajelzés</h5>
+                        
+                        <div class="accordion" id="accordion-<%= result.filename.replace(/[^\w]/g, '-') %>">
+                            <!-- Security Issues -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                                           data-bs-target="#security-<%= result.filename.replace(/[^\w]/g, '-') %>">
+                                        Biztonsági Problémák
+                                    </button>
+                                </h2>
+                                <div id="security-<%= result.filename.replace(/[^\w]/g, '-') %>" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <% result.analysis.security_issues.forEach(function(issue) { %>
+                                            <div class="card-feedback">
+                                                <div class="question"><%= issue.question %></div>
+                                                <div class="answer"><%= issue.answer %></div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Quality Issues -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                           data-bs-target="#quality-<%= result.filename.replace(/[^\w]/g, '-') %>">
+                                        Kódminőségi Problémák
+                                    </button>
+                                </h2>
+                                <div id="quality-<%= result.filename.replace(/[^\w]/g, '-') %>" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <% result.analysis.quality_issues.forEach(function(issue) { %>
+                                            <div class="card-feedback">
+                                                <div class="question"><%= issue.question %></div>
+                                                <div class="answer"><%= issue.answer %></div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Simplification Suggestions -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                           data-bs-target="#simplify-<%= result.filename.replace(/[^\w]/g, '-') %>">
+                                        Egyszerűsítési Javaslatok
+                                    </button>
+                                </h2>
+                                <div id="simplify-<%= result.filename.replace(/[^\w]/g, '-') %>" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <% result.analysis.simplification_suggestions.forEach(function(suggestion) { %>
+                                            <div class="card-feedback">
+                                                <div class="question"><%= suggestion.question %></div>
+                                                <div class="answer"><%= suggestion.answer %></div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Best Practices Violations -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                           data-bs-target="#practices-<%= result.filename.replace(/[^\w]/g, '-') %>">
+                                        Legjobb Gyakorlatok Megsértése
+                                    </button>
+                                </h2>
+                                <div id="practices-<%= result.filename.replace(/[^\w]/g, '-') %>" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <% result.analysis.best_practices_violations.forEach(function(violation) { %>
+                                            <div class="card-feedback">
+                                                <div class="question"><%= violation.question %></div>
+                                                <div class="answer"><%= violation.answer %></div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-success apply-fix" 
+                                    data-filename="<%= result.filename %>"
+                                    data-original-code="<%= result.content %>"
+                                    data-fixed-code="<%= result.analysis.fixed_code %>">
+                                Javítás Alkalmazása
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle code blocks in answers
+            document.querySelectorAll('.answer').forEach(answer => {
+                // Replace code blocks (text between backticks) with styled blocks
+                answer.innerHTML = answer.innerHTML.replace(/`([^`]+)`/g, '<code class="code-block">$1</code>');
+            });
+
+            // Highlight differences in code
+            document.querySelectorAll('.diff-container').forEach(container => {
+                const originalLines = container.querySelector('.diff-panel:first-child .diff-code').textContent.split('\n');
+                const fixedLines = container.querySelector('.diff-panel:last-child .diff-code').textContent.split('\n');
+                
+                // Simple diff visualization - not perfect but functional
+                const originalCode = container.querySelector('.diff-panel:first-child .diff-code');
+                const fixedCode = container.querySelector('.diff-panel:last-child .diff-code');
+                
+                // Generate HTML with highlighted diffs
+                let originalHtml = '';
+                let fixedHtml = '';
+                
+                originalLines.forEach((line, index) => {
+                    if (index < fixedLines.length && line !== fixedLines[index]) {
+                        originalHtml += '<div class="line-removed">' + escapeHtml(line) + '</div>';
+                    } else {
+                        originalHtml += '<div>' + escapeHtml(line) + '</div>';
+                    }
+                });
+                
+                fixedLines.forEach((line, index) => {
+                    if (index < originalLines.length && line !== originalLines[index]) {
+                        fixedHtml += '<div class="line-added">' + escapeHtml(line) + '</div>';
+                    } else {
+                        fixedHtml += '<div>' + escapeHtml(line) + '</div>';
+                    }
+                });
+                
+                originalCode.innerHTML = originalHtml;
+                fixedCode.innerHTML = fixedHtml;
+            });
+        });
+        
+        // Helper function to escape HTML
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        document.querySelectorAll('.apply-fix').forEach(button => {
+            button.addEventListener('click', async () => {
+                const filename = button.dataset.filename;
+                const originalCode = button.dataset.originalCode;
+                const fixedCode = button.dataset.fixedCode;
+
+                try {
+                    const response = await fetch('/apply-fix', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            filename,
+                            originalCode,
+                            fixedCode
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Javítás sikeresen alkalmazva!');
+                    } else {
+                        alert('Hiba a javítás alkalmazásakor: ' + result.error);
+                    }
+                } catch (error) {
+                    alert('Hiba a javítás alkalmazásakor: ' + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
